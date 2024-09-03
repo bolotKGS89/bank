@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -121,5 +122,31 @@ class TaskServiceTest {
 
         //Then
         assertThrows(TaskNotFoundException.class, () -> taskService.deleteTask(THREE));
+    }
+
+    @Test
+    void testChangeTask() {
+        //When
+        when(taskRepository.findById(ONE)).thenReturn(Optional.of(task1));
+        when(taskRepository.save(any(Task.class))).thenReturn(task1);
+        when(taskMapper.toTaskDto(task1)).thenReturn(taskDto1);
+
+        TaskDto updatedTaskDto = taskService.changeTask(taskDto1, ONE);
+
+        //Then
+        assertThat(taskDto1.getId()).isEqualTo(updatedTaskDto.getId());
+        assertThat(taskDto1.getDescription()).isEqualTo(updatedTaskDto.getDescription());
+        assertThat(taskDto1.getStatus()).isEqualTo(updatedTaskDto.getStatus());
+    }
+
+    @Test
+    public void testChangeTask_TaskNotFoundException() {
+        //When
+        when(taskRepository.findById(1L)).thenReturn(Optional.empty());
+
+        //Then
+        assertThrows(TaskNotFoundException.class, () -> {
+            taskService.changeTask(taskDto1, ONE);
+        });
     }
 }

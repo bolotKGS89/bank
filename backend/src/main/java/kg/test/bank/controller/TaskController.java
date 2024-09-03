@@ -1,12 +1,10 @@
 package kg.test.bank.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import kg.test.bank.dtos.TaskDto;
 import kg.test.bank.exceptions.InvalidTaskDataException;
 import kg.test.bank.service.TaskService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +38,7 @@ public class TaskController {
             taskDto.getStatus() == null) {
             throw new InvalidTaskDataException("Task field cannot be empty");
         }
-        return taskService.createTask(taskDto);
+         return taskService.createTask(taskDto);
     }
 
     @Operation(summary = "Change task by id",
