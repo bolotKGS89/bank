@@ -69,5 +69,5 @@ public class TaskControllerTest {
                 )
                 .andExpect(status().isOk());
     }
-    
+
 }
